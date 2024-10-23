@@ -6,12 +6,12 @@ public class BaseballGame {
     Scanner sc = new Scanner(System.in);
     Random random = new Random();
     List<Integer> answerList;
-    // 생성자에 들어가야 할 것이 무엇일까... 한게임을 만들었을때 정답?
+    // 생성자에 들어가야 할 것이 무엇일까... 한게임을 만들었을때 시행횟수?
 
     // 랜덤 정답 번호 생성
+    // 1~9까지의 랜덤한 숫자 생성 (중복불가), 숫자의 갯수가 3개가 되면 종료되는 반복문
     public BaseballGame() {
         Set<Integer> AnswerSet = new HashSet<>();
-        // 1~9까지의 랜덤한 숫자 생성 (중복불가), 숫자의 갯수가 3개가 되면 종료되는 반복문
         while (true) {
             int ranNum = random.nextInt(9) + 1;
             AnswerSet.add(ranNum);
@@ -19,7 +19,7 @@ public class BaseballGame {
                 break;
             }
         }
-        // hashSet 을 랜덤하게 정렬하기 위해 ArrayList로 변환
+        // hashSet 을 랜덤하게 정렬하기 위해 ArrayList 로 변환
         answerList = new ArrayList<Integer>(AnswerSet);
 
         // Collections.shuffle 을 통해 list 안의 내용을 랜덤하게 정렬
@@ -38,7 +38,8 @@ public class BaseballGame {
                     isValidNumber(inputNumber);
                     break;
                 } catch (InputMismatchException e) {
-                    System.out.print("잘못된 입력값입니다. 다시 입력해주세요: ");
+                    System.out.println("올바르지 않은 입력값입니다.");
+                    System.out.print("숫자를 입력해주세요: ");
                     sc.nextLine();
                 }
                 catch (IllegalArgumentException e) {
@@ -73,7 +74,6 @@ public class BaseballGame {
 
             if (strike == 3) {
                 System.out.println("축하드립니다! 정답입니다!!!");
-                System.out.println("게임을 종료합니다.");
                 break;
             }
         }
@@ -93,15 +93,20 @@ public class BaseballGame {
         return list;
     }
 
-    public static boolean isValidNumber(int inputNumber) {
+    private boolean isValidNumber(int inputNumber) {
         if (inputNumber >= 100 && inputNumber <= 999) {
             return true;
         } else {
-            throw new IllegalArgumentException("잘못된 입력값입니다. 다시 입력해주세요: ");
+            throw new IllegalArgumentException("올바르지 않은 입력값입니다.\n숫자를 입력해주세요: ");
         }
     }
 
     public static void startGame() {
-        System.out.println(" <게임을 시작합니다> ");
+        System.out.println("< 환영합니다! 원하시는 번호를 입력해주세요. >");
+        System.out.println("1. 게임시작하기 | 2. 게임 기록 보기 | 3. 종료하기");
+    }
+
+    public static void finishGame() {
+        System.out.println("게임을 종료합니다.");
     }
 }
