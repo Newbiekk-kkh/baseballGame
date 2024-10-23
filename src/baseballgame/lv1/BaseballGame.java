@@ -2,10 +2,10 @@ package baseballgame.lv1;
 
 import java.util.*;
 
-public class BaseballGame extends Exception {
+public class BaseballGame {
     Scanner sc = new Scanner(System.in);
     Random random = new Random();
-    private List<Integer> answerList;
+    List<Integer> answerList;
     // 생성자에 들어가야 할 것이 무엇일까... 한게임을 만들었을때 정답?
 
     // 랜덤 정답 번호 생성
@@ -27,13 +27,28 @@ public class BaseballGame extends Exception {
     }
 
     public void play() {
+        // 1. 유저에게 입력값을 받음.
         while (true) {
-            // 1. 유저에게 입력값을 받음.
             System.out.print("숫자를 입력해주세요: ");
-            int inputAnswer = sc.nextInt();
+            int inputNumber = 0;
+
+            while (true) {
+                try {
+                    inputNumber = sc.nextInt();
+                    isValidNumber(inputNumber);
+                    break;
+                } catch (InputMismatchException e) {
+                    System.out.print("잘못된 입력값입니다. 다시 입력해주세요: ");
+                    sc.nextLine();
+                }
+                catch (IllegalArgumentException e) {
+                    System.out.print(e.getMessage());
+                    sc.nextLine();
+                }
+            }
 
             // 2. 스트라이크,볼 개수 계산
-            List<Integer> inputList = changeAnswerToList(inputAnswer);
+            List<Integer> inputList = changeAnswerToList(inputNumber);
 
             int strike = 0;
             int ball = 0;
@@ -50,7 +65,7 @@ public class BaseballGame extends Exception {
                 }
             }
 
-            if (strike == 0 && ball ==0) {
+            if (strike == 0 && ball == 0) {
                 System.out.println("아웃!!!");
             } else {
                 System.out.println(strike + "스트라이크!  " + ball + "볼!");
@@ -58,14 +73,14 @@ public class BaseballGame extends Exception {
 
             if (strike == 3) {
                 System.out.println("축하드립니다! 정답입니다!!!");
+                System.out.println("게임을 종료합니다.");
                 break;
             }
         }
-
     }
 
     // 입력한 값을 ArrayList로 변경하는 메서드
-    public List<Integer> changeAnswerToList(int answer) {
+    private List<Integer> changeAnswerToList(int answer) {
         List<Integer> list = new ArrayList<Integer>();
 
         while (answer > 0) {
@@ -78,7 +93,15 @@ public class BaseballGame extends Exception {
         return list;
     }
 
-    public void startGame() {
+    public static boolean isValidNumber(int inputNumber) {
+        if (inputNumber >= 100 && inputNumber <= 999) {
+            return true;
+        } else {
+            throw new IllegalArgumentException("잘못된 입력값입니다. 다시 입력해주세요: ");
+        }
+    }
+
+    public static void startGame() {
         System.out.println(" <게임을 시작합니다> ");
     }
 }
