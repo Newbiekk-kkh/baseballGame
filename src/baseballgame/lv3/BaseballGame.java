@@ -1,4 +1,4 @@
-package baseballgame.lv2;
+package baseballgame.lv3;
 
 import java.util.*;
 
@@ -6,6 +6,8 @@ public class BaseballGame {
     Scanner sc = new Scanner(System.in);
     Random random = new Random();
     List<Integer> answerList;
+    List<BaseballGame> gameRecord = new ArrayList<BaseballGame>();
+    int answerCount;
     // 생성자에 들어가야 할 것이 무엇일까... 한게임을 만들었을때 시행횟수?
 
     // 랜덤 정답 번호 생성
@@ -64,6 +66,8 @@ public class BaseballGame {
                 }
             }
 
+            answerCount++;
+
             if (strike == 0 && ball == 0) {
                 System.out.println("아웃!!!");
             } else {
@@ -100,16 +104,7 @@ public class BaseballGame {
                 throw new IllegalArgumentException("올바르지 않은 입력값입니다.\n중복되지 않은 숫자를 입력해주세요: ");
             }
         } else {
-            throw new InputMismatchException("올바르지 않은 입력값입니다.\n숫자를 입력해주세요: ");
+            throw new IllegalArgumentException("올바르지 않은 입력값입니다.\n숫자를 입력해주세요: ");
         }
-    }
-
-    public static void startGame() {
-        System.out.println("< 환영합니다! 원하시는 번호를 입력해주세요. >");
-        System.out.println("1. 게임시작하기 | 2. 게임 기록 보기 | 3. 종료하기");
-    }
-
-    public static void finishGame() {
-        System.out.println("게임을 종료합니다.");
     }
 }
