@@ -95,7 +95,12 @@ public class BaseballGame {
 
     private boolean isValidNumber(int inputNumber) {
         if (inputNumber >= 100 && inputNumber <= 999) {
-            return true;
+            List<Integer> inputList = changeAnswerToList(inputNumber);
+            if (inputList.get(0) != inputList.get(1) && inputList.get(0) != inputList.get(2) && inputList.get(1) != inputList.get(2)) {
+                return true;
+            } else {
+                throw new IllegalArgumentException("올바르지 않은 입력값입니다.\n중복되지 않은 숫자를 입력해주세요: ");
+            }
         } else {
             throw new IllegalArgumentException("올바르지 않은 입력값입니다.\n숫자를 입력해주세요: ");
         }
