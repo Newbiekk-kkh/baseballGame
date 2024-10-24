@@ -1,4 +1,4 @@
-package baseballgame.lv1;
+package baseballgame.lv2;
 
 import java.util.*;
 
@@ -30,7 +30,23 @@ public class BaseballGame {
         // 1. 유저에게 입력값을 받음.
         while (true) {
             System.out.print("숫자를 입력해주세요: ");
-            int inputNumber = sc.nextInt();
+            int inputNumber = 0;
+
+            while (true) {
+                try {
+                    inputNumber = sc.nextInt();
+                    isValidNumber(inputNumber);
+                    break;
+                } catch (InputMismatchException e) {
+                    System.out.println("올바르지 않은 입력값입니다.");
+                    System.out.print("숫자를 입력해주세요: ");
+                    sc.nextLine();
+                }
+                catch (IllegalArgumentException e) {
+                    System.out.print(e.getMessage());
+                    sc.nextLine();
+                }
+            }
 
             // 2. 스트라이크,볼 개수 계산
             List<Integer> inputList = changeAnswerToList(inputNumber);
@@ -77,8 +93,17 @@ public class BaseballGame {
         return list;
     }
 
+    private boolean isValidNumber(int inputNumber) {
+        if (inputNumber >= 100 && inputNumber <= 999) {
+            return true;
+        } else {
+            throw new IllegalArgumentException("올바르지 않은 입력값입니다.\n숫자를 입력해주세요: ");
+        }
+    }
+
     public static void startGame() {
-        System.out.println("< 게임을 시작합니다 >");
+        System.out.println("< 환영합니다! 원하시는 번호를 입력해주세요. >");
+        System.out.println("1. 게임시작하기 | 2. 게임 기록 보기 | 3. 종료하기");
     }
 
     public static void finishGame() {
