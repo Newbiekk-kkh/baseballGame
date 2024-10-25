@@ -42,7 +42,7 @@ public class BaseballGame {
                     System.out.print("올바르지 않은 입력값입니다.\n" + ballQuantity + "자리의 숫자를 입력해주세요: ");
                     sc.nextLine();
                 } catch (IllegalArgumentException e) {
-                    System.out.print(e.getMessage());
+                    System.out.print("올바르지 않은 입력값입니다.\n" + ballQuantity + "자리의 숫자를 입력해주세요: ");
                     sc.nextLine();
                 }
             }
@@ -96,7 +96,8 @@ public class BaseballGame {
                     throw new InputMismatchException("올바르지 않은 입력값입니다.\n'3~5' 사이의 숫자를 입력해주세요!");
                 }
             } catch (InputMismatchException e) {
-                System.out.println(e.getMessage());
+                System.out.println("올바르지 않은 입력값입니다.\n'3~5' 사이의 숫자를 입력해주세요!");
+                sc.nextLine();
             }
         }
         return ballQuantity;
