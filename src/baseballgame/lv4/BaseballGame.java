@@ -1,4 +1,4 @@
-package baseballgame.lv2;
+package baseballgame.lv4;
 
 import java.util.*;
 
@@ -6,38 +6,40 @@ public class BaseballGame {
     Scanner sc = new Scanner(System.in);
     Random random = new Random();
     List<Integer> answerList;
+    List<BaseballGame> gameRecord = new ArrayList<BaseballGame>();
+    int answerCount;
 
     // 랜덤 정답 번호 생성
-    // 1~9까지의 랜덤한 숫자 생성 (중복불가), 숫자의 갯수가 3개가 되면 종료되는 반복문
-    public BaseballGame() {
+    // 1~9까지의 랜덤한 숫자 생성 (중복불가), 숫자의 갯수가 ballQuantity 개가 되면 종료되는 반복문
+    public BaseballGame(int ballQuantity) {
         Set<Integer> answerSet = new HashSet<>();
         while (true) {
             int ranNum = random.nextInt(9) + 1;
             answerSet.add(ranNum);
-            if (answerSet.size() == 3) {
+            if (answerSet.size() == ballQuantity) {
                 break;
             }
         }
-        // hashSet 을 랜덤하게 정렬하기 위해 ArrayList 로 변환
+        // hashSet 을 정렬하기 위해 ArrayList 로 변환
         answerList = new ArrayList<Integer>(answerSet);
 
         // Collections.shuffle 을 통해 list 안의 내용을 랜덤하게 정렬
         Collections.shuffle(answerList);
     }
 
-    public void play() {
-        // 1. 유저에게 입력값을 받음.
+    public void play(int ballQuantity) {
         while (true) {
-            System.out.print("숫자를 입력해주세요: ");
+            // 1. 유저에게 입력값을 받음.
             int inputNumber = 0;
+            System.out.print("숫자를 입력해주세요: ");
 
             while (true) {
                 try {
                     inputNumber = sc.nextInt();
-                    isValidNumber(inputNumber);
+                    isValidNumber(inputNumber, ballQuantity);
                     break;
                 } catch (InputMismatchException e) {
-                    System.out.print("올바르지 않은 입력값입니다.\n숫자를 입력해주세요: ");
+                    System.out.print("올바르지 않은 입력값입니다.\n" + ballQuantity + "자리의 숫자를 입력해주세요: ");
                     sc.nextLine();
                 } catch (IllegalArgumentException e) {
                     System.out.print(e.getMessage());
@@ -51,8 +53,8 @@ public class BaseballGame {
             int strike = 0;
             int ball = 0;
 
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < ballQuantity; i++) {
+                for (int j = 0; j < ballQuantity; j++) {
                     if (answerList.get(i).equals(inputList.get(j))) {
                         if (i == j) {
                             strike++;
@@ -62,19 +64,42 @@ public class BaseballGame {
                     }
                 }
             }
+            // 게임시도 횟수 증가
+            answerCount++;
 
-            // 결과값 출력
+            // 입력 값에 대한 게임 결과
             if (strike == 0 && ball == 0) {
                 System.out.println("아웃!!!");
             } else {
                 System.out.println(strike + "스트라이크!  " + ball + "볼!");
             }
 
-            if (strike == 3) {
+            if (strike == ballQuantity) {
                 System.out.println("축하드립니다! 정답입니다!!!");
                 break;
             }
         }
+    }
+
+    // 게임난이도 조절 ( 볼 갯수 설정 )
+    public int setBallQuantity() {
+        System.out.println("설정하고자 하는 자리수를 입력하세요.");
+        int ballQuantity = 0;
+        while (true) {
+            try {
+                int quantity = sc.nextInt();
+                if (quantity == 3 || quantity == 4 || quantity == 5) {
+                    ballQuantity = quantity;
+                    System.out.println(ballQuantity + "자리수 난이도로 설정되었습니다.");
+                    break;
+                } else {
+                    throw new InputMismatchException("올바르지 않은 입력값입니다.\n'3~5' 사이의 숫자를 입력해주세요!");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return ballQuantity;
     }
 
     // 입력한 값을 ArrayList로 변경하는 메서드
@@ -91,26 +116,19 @@ public class BaseballGame {
         return list;
     }
 
-    // 입력 유효성 검사
-    private boolean isValidNumber(int inputNumber) {
-        if (inputNumber >= 100 && inputNumber <= 999) {
-            List<Integer> inputList = changeAnswerToList(inputNumber);
-            if (inputList.get(0) != inputList.get(1) && inputList.get(0) != inputList.get(2) && inputList.get(1) != inputList.get(2)) {
+    // 사용자의 입력값이 유효한지 검사
+    private boolean isValidNumber(int inputNumber, int ballQuantity) {
+        List<Integer> inputList = changeAnswerToList(inputNumber);
+        Set<Integer> inputSet = new HashSet<Integer>(inputList);
+
+        if (ballQuantity == inputList.size()) {
+            if (inputList.size() == inputSet.size()) {
                 return true;
             } else {
                 throw new IllegalArgumentException("올바르지 않은 입력값입니다.\n중복되지 않은 숫자를 입력해주세요: ");
             }
         } else {
-            throw new InputMismatchException("올바르지 않은 입력값입니다.\n숫자를 입력해주세요: ");
+            throw new InputMismatchException("올바르지 않은 입력값입니다.\n" + ballQuantity + "자리의 숫자를 입력해주세요: ");
         }
-    }
-    // 게임 시작
-    public static void startGame() {
-        System.out.println("< 환영합니다! 원하시는 번호를 입력해주세요. >");
-        System.out.println("1. 게임시작하기 | 2. 게임 기록 보기 | 3. 종료하기");
-    }
-    // 게임 종료
-    public static void finishGame() {
-        System.out.println("게임을 종료합니다.");
     }
 }

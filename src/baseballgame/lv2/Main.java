@@ -18,11 +18,11 @@ public class Main {
 
                     case 2:
                         System.out.println("아직 구현되지 않은 기능입니다.");
-                        baseballGame.finishGame();  // finishGame 메서드 호출
+                        baseballGame.finishGame();
                         return; // 프로그램 종료
 
                     case 3:
-                        baseballGame.finishGame();  // finishGame 메서드 호출
+                        baseballGame.finishGame();
                         return; // 프로그램 종료
 
                     default:

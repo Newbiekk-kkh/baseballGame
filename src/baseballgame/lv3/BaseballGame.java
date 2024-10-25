@@ -8,21 +8,20 @@ public class BaseballGame {
     List<Integer> answerList;
     List<BaseballGame> gameRecord = new ArrayList<BaseballGame>();
     int answerCount;
-    // 생성자에 들어가야 할 것이 무엇일까... 한게임을 만들었을때 시행횟수?
 
     // 랜덤 정답 번호 생성
     // 1~9까지의 랜덤한 숫자 생성 (중복불가), 숫자의 갯수가 3개가 되면 종료되는 반복문
     public BaseballGame() {
-        Set<Integer> AnswerSet = new HashSet<>();
+        Set<Integer> answerSet = new HashSet<>();
         while (true) {
             int ranNum = random.nextInt(9) + 1;
-            AnswerSet.add(ranNum);
-            if (AnswerSet.size() == 3) {
+            answerSet.add(ranNum);
+            if (answerSet.size() == 3) {
                 break;
             }
         }
         // hashSet 을 랜덤하게 정렬하기 위해 ArrayList 로 변환
-        answerList = new ArrayList<Integer>(AnswerSet);
+        answerList = new ArrayList<Integer>(answerSet);
 
         // Collections.shuffle 을 통해 list 안의 내용을 랜덤하게 정렬
         Collections.shuffle(answerList);
@@ -65,9 +64,10 @@ public class BaseballGame {
                     }
                 }
             }
-
+            // 정답 시도 횟수 증가
             answerCount++;
 
+            // 결과값 출력
             if (strike == 0 && ball == 0) {
                 System.out.println("아웃!!!");
             } else {
@@ -95,6 +95,7 @@ public class BaseballGame {
         return list;
     }
 
+    // 입력 유효성 검사
     private boolean isValidNumber(int inputNumber) {
         if (inputNumber >= 100 && inputNumber <= 999) {
             List<Integer> inputList = changeAnswerToList(inputNumber);
